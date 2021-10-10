@@ -4,6 +4,7 @@ import signal
 import os
 import sys
 
+sys.path.append(sys.path.pop(0))
 from datetime import datetime
 
 
