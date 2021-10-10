@@ -103,6 +103,9 @@ def read_db(db_path):
     return db
 
 
+read_db(db_path)
+
+
 def write_db(db_path, db):
     with open(db_path, "w") as f:
         for entry in db:
