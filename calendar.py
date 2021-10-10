@@ -1,7 +1,7 @@
 import os
 import sys
 
-from common import quoted_split, parse_date, read_db, print_entry
+from common import parse_date, read_db, print_entry
 
 
 # Constants for file paths
