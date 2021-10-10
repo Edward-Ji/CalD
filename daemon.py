@@ -9,7 +9,7 @@ from common import quoted_split, parse_date, read_db, write_db
 
 # Constants for file paths
 PIPE_PATH = "/tmp/cald_pipe"
-LINK_PATH = "/tmp/calender_link"
+LINK_PATH = "/tmp/calendar_link"
 ERRLOG_PATH = "/tmp/cald_err.log"
 
 
