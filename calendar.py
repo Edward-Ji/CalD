@@ -1,12 +1,75 @@
 import os
 import sys
 
-from common import parse_date, read_db, print_entry
+from datetime import datetime
 
 
 # Constants for file paths
 PIPE_PATH = "/tmp/cald_pipe"
 LINK_PATH = "/tmp/calender_link"
+
+
+def quoted_split(line, sep=' '):
+    """
+    Separate a line into fields by the given separator. It a separator is
+    double-quoted, it is taken literally.
+    e.g. quoted_split('1 "2 3"', ' ') -> ['1', '2 3']
+    """
+    fields = []
+    field = ""
+    literal = False
+    for c in line:
+        if literal:
+            if c == '"':
+                literal = False
+            else:
+                field += c
+        elif c == '"':
+            literal = True
+        elif c == sep:
+            if field:
+                fields.append(field)
+                field = ""
+        else:
+            field += c
+    # Unterminated literal
+    if literal:
+        return None
+
+    if field:
+        fields.append(field)
+    return fields
+
+
+def parse_date(date_string):
+    """
+    Wrapper for datetime formatted parse function. Returns None instead of
+    throwing an exception. The string is parsed in 'dd-mm-yyyy' format.
+    """
+    try:
+        return datetime.strptime(date_string, "%d-%m-%Y").date()
+    except ValueError:
+        return None
+
+
+def read_db(db_path):
+    db = []
+    with open(db_path) as f:
+        for entry in f.readlines():
+            entry = entry.strip()
+            if not entry:
+                continue
+            date, name, desc = quoted_split(entry, sep=",")
+            date = parse_date(date)
+            db.append([date, name, desc])
+    return db
+
+
+def print_entry(entry):
+    date, name, desc = entry
+    date = datetime.strftime(date, "%d-%m-%Y")
+    print(" : ".join((date, name, desc)))
+
 
 # Read database path from link file
 with open(LINK_PATH) as link:
