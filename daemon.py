@@ -15,11 +15,10 @@ ERRLOG_PATH = "/tmp/cald_err.log"
 
 # Write to error log
 def error(message):
-    # if not os.path.exists(ERRLOG_PATH):
-    #     open(db_path, "w").close()
-    # with open(ERRLOG_PATH, "a") as f:
-    #     f.write(message + "\n")
-    print(message)
+    if not os.path.exists(ERRLOG_PATH):
+        open(db_path, "w").close()
+    with open(ERRLOG_PATH, "a") as f:
+        f.write(message + "\n")
 
 
 # Craete and link datebase
