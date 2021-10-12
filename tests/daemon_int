@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+./daemon.py &
+echo > /tmp/cald_pipe
+# pkill -2 python3
+sleep 1
+if pgrep python3; then
+    echo "Still running!"
+    exit 1
+fi
