@@ -104,7 +104,7 @@ def calendar_get_interval(start_date, end_date):
         return
     db = read_db(db_path)
     for entry in db:
-        if start_date < entry[0] < end_date:
+        if start_date <= entry[0] <= end_date:
             print_entry(entry)
 
 
