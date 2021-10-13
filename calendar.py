@@ -73,8 +73,11 @@ def print_entry(entry):
 
 
 # Read database path from link file
-with open(LINK_PATH) as link:
-    db_path = link.read()
+if os.path.exists(LINK_PATH):
+    with open(LINK_PATH) as link:
+        db_path = link.read()
+else:
+    db_path = os.path.join(os.path.dirname(__file__), "cald_db.csv")
 
 
 # Write to standard error
