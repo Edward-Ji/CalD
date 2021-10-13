@@ -7,7 +7,7 @@ from datetime import datetime
 
 # Constants for file paths
 PIPE_PATH = "/tmp/cald_pipe"
-LINK_PATH = "/tmp/calender_link"
+LINK_PATH = "/tmp/calendar_link"
 
 
 def quoted_split(line, sep=' '):
@@ -73,11 +73,8 @@ def print_entry(entry):
 
 
 # Read database path from link file
-if os.path.exists(LINK_PATH):
-    with open(LINK_PATH) as link:
-        db_path = link.read()
-else:
-    db_path = os.path.join(os.path.dirname(__file__), "cald_db.csv")
+with open(LINK_PATH) as link:
+    db_path = link.read()
 
 
 # Write to standard error
@@ -136,7 +133,7 @@ def run_get():
         else:
             start_date = parse_date(sys.argv[3])
             end_date = parse_date(sys.argv[4])
-            if start_date is None or end_date() is None:
+            if start_date is None or end_date is None:
                 error("Unable to parse date")
             else:
                 calendar_get_interval(start_date, end_date)
