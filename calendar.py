@@ -89,7 +89,6 @@ def error(message):
 def daemon(command):
     try:
         with open(PIPE_PATH, "w") as pipe:
-            print("write to daemon")
             pipe.write(command + "\n")
     except OSError as e:
         error("OSError: " + str(e))
