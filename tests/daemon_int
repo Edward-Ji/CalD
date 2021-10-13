@@ -1,9 +1,11 @@
 #!/usr/bin/env bash
+
 ./daemon.py &
+daemon_pid=$!
 echo > /tmp/cald_pipe
-# pkill -2 python3
+kill -2 $daemon_pid
 sleep 1
-if pgrep python3; then
-    echo "Still running!"
+if ps -p $daemon_pid > /dev/null; then
+    echo "daemon process not terminated"
     exit 1
 fi
