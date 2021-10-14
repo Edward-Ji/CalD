@@ -26,9 +26,13 @@ for test in $(find $test_dir -name "test_*"); do
     else
         printf "${fail} ${test_name}\n"
         # Print the testcase output from temporary file
-        cat $test_tmp | sed 's/^/       /'
+        if [[ -s $test_tmp ]]; then
+            cat $test_tmp | sed 's/^/       /'
+        else
+            echo "       Testcase failed to run"
+        fi
     fi
+    # Clean up
+    [[ -f $test_tmp ]] && rm $test_tmp
+    pkill -9 -f "./daemon.py"
 done
-
-# Clean up
-[[ -f $test_tmp ]] && rm $test_tmp
