@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+
+fifo_path="/tmp/cald_pipe"
+[[ -e $fifo_path ]] && rm $fifo_path
+
+./daemon.py &
+sleep .1 # allow daemon to prepare
+
+if [[ ! -p $fifo_path ]]; then
+    echo "Path $fifo_path does not exist or is not a named pipe"
+    exit 1
+fi

@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+
+db_path="${PWD}/datebase.csv"
+link_path='/tmp/calendar_link'
+./daemon.py $db_path &
+sleep .1 # allow daemon to prepare
+
+if [[ ! -f $db_path ]]; then
+    echo "Path $db_path does not exist or is not a regular file"
+    exit 1
+fi
+rm $db_path
+
+if [[ ! -f $link_path ]]; then
+    echo "Path $link_path does not exist or is not a regular file"
+    exit 1
+fi
+if [[ ! $(cat $link_path) = $db_path ]]; then
+    echo "Path $link_path not as expected"
+    exit 1
+fi
