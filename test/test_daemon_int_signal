@@ -4,7 +4,7 @@
 daemon_pid=$!
 echo > /tmp/cald_pipe
 kill -2 $daemon_pid
-sleep 1
+sleep .1 # allow daemon to fianlize
 if ps -p $daemon_pid > /dev/null; then
     echo "Daemon process not terminated after INT signal"
     exit 1

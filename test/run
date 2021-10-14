@@ -13,16 +13,18 @@ pass="${bold}${fg_green}[pass]${reset_all}"
 fail="${bold}${fg_red}[fail]${reset_all}"
 
 # Run tests and display results
-for test in $(find $test_dir -name "test_"); do
-    # Redirect testcase output to a temporary file
-    ./$test_dir/$test > $test_tmp
+for test in $(find $test_dir -name "test_*"); do
+    # Run test and redirect output to a temporary file
+    $test > $test_tmp
     # Record the exit status
     exit_status=$?
+    # Get test name
+    test_name=$(basename $test | sed 's/_/ /g')
     # Check the exit status
     if [[ $exit_status -eq 0 ]]; then
-        printf "${pass} $(sed 's/_/ /g' <<< $test)\n"
+        printf "${pass} ${test_name}\n"
     else
-        printf "${fail} $(sed 's/_/ /g' <<< $test)\n"
+        printf "${fail} ${test_name}\n"
         # Print the testcase output from temporary file
         cat $test_tmp | sed 's/^/       /'
     fi
