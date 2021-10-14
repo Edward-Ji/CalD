@@ -2,7 +2,7 @@
 
 A calendar app.
 
-## Run manually
+## Run directly
 
 **Run calendar daemon with `python daemon.py [<database path>]`.**
 
@@ -57,8 +57,50 @@ Delete all events matching the specified date and name.
 
 There are a series of tests included in the `test` directory. Run them from the
 project root. You can run them individually `./test/test_<name>` or `./test/run`
-will run all tests.
+will run all tests automatically. Note that the test cases may fail on the
+first try sometimes despite working solutions.
 
 ## Install
 
-A distribution is available as an alpine linux package.
+This project is available as an Alpine Linux build.
+
+### Build manually and install
+
+All the files needed to build the package is included in the `build` directory.
+To build the package yourself, execute the following commands in an Alpine
+Linux machine.
+
+```
+cd build
+abuild checksum
+abuild -r
+```
+
+The package will be generated in package directory defaults to `~/packages`.
+
+Assuming all the configuration is default, install the package using
+
+```
+sudo apk add --repository /home/$USER/packages/$USER
+```
+
+### Install pre-built APK
+
+A pre-built APK file can be found if the `dist` directory. Simply execute the
+following command to add the package and install it.
+
+```
+apk add dist/cald.apk
+```
+
+It usually requires root access, so you may need to `su root` or add `sudo` up
+front.
+
+After installing the package, the daemon will automatically run upon start up
+using `openrc-run`. A shortcut command `calendar` is available in place of
+`python3 calendar.py`. For example, you can execute the following at command
+line.
+
+```
+calendar ADD 15-10-2021 "some event" "this will be amazing!"
+```
