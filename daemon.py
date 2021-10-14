@@ -24,7 +24,7 @@ def quoted_split(line, sep=' '):
     fields = []
     field = ""
     literal = False
-    for c in line:
+    for c in line.strip():
         if literal:
             if c == '"':
                 literal = False
@@ -42,8 +42,7 @@ def quoted_split(line, sep=' '):
     if literal:
         return None
 
-    if field:
-        fields.append(field)
+    fields.append(field)
     return fields
 
 
@@ -81,6 +80,7 @@ def write_db(db_path, db):
             if "," in desc:
                 desc = f'"{desc}"'
             f.write(",".join((event_date, name, desc)) + "\n")
+
 
 # Write to error log
 def error(message):
