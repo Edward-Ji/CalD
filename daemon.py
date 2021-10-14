@@ -111,7 +111,9 @@ with open(LINK_PATH, "w") as link:
 # Create the named pipe if it does not exist
 if not os.path.exists(PIPE_PATH):
     try:
+        umask = os.umask(0o000)
         os.mkfifo(PIPE_PATH)
+        os.umask(umask)
     except OSError as e:
         error(f"OSError: {e}")
 
