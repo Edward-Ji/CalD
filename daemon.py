@@ -3,9 +3,7 @@
 import signal
 import os
 import sys
-
-sys.path.append(sys.path.pop(0))
-from datetime import datetime
+from datetime import date
 
 
 # Constants for file paths
@@ -85,7 +83,7 @@ def parse_date(date_string):
     throwing an exception. The string is parsed in 'dd-mm-yyyy' format.
     """
     try:
-        return datetime.strptime(date_string, "%d-%m-%Y").date()
+        return date(*map(int, date_string.split('-')[::-1]))
     except ValueError:
         return None
 
@@ -97,9 +95,9 @@ def read_db(db_path):
             entry = entry.strip()
             if not entry:
                 continue
-            date, name, desc = quoted_split(entry, sep=",")
-            date = parse_date(date)
-            db.append([date, name, desc])
+            event_date, name, desc = quoted_split(entry, sep=",")
+            event_date = parse_date(event_date)
+            db.append([event_date, name, desc])
     return db
 
 
@@ -109,37 +107,37 @@ read_db(db_path)
 def write_db(db_path, db):
     with open(db_path, "w") as f:
         for entry in db:
-            date, name, desc = entry
-            date = datetime.strftime(date, "%d-%m-%Y")
+            event_date, name, desc = entry
+            event_date = event_date.strftime("%d-%m-%Y")
             if "," in name:
                 name = f'"{name}"'
             if "," in desc:
                 desc = f'"{desc}"'
-            f.write(",".join((date, name, desc)) + "\n")
+            f.write(",".join((event_date, name, desc)) + "\n")
 
 
 # ==================
 # Calendar functions
 # ==================
-def calendar_add(date, name, desc=""):
+def calendar_add(event_date, name, desc=""):
     db = read_db(db_path)
-    db.append([date, name, desc])
+    db.append([event_date, name, desc])
     write_db(db_path, db)
 
 
-def calendar_upd(date, name, new_name, new_desc=""):
+def calendar_upd(event_date, name, new_name, new_desc=""):
     db = read_db(db_path)
     for entry in db:
-        if entry[0] == date and entry[1] == name:
+        if entry[0] == event_date and entry[1] == name:
             entry[1] = new_name
             entry[2] = new_desc
     write_db(db_path, db)
 
 
-def calendar_del(date, name):
+def calendar_del(event_date, name):
     db = read_db(db_path)
     for entry in db:
-        if entry[0] == date and entry[1] == name:
+        if entry[0] == event_date and entry[1] == name:
             db.remove(entry)
     write_db(db_path, db)
 
@@ -175,35 +173,35 @@ def run():
             if len(args) == 1:
                 error("Missing event date")
             else:
-                date = parse_date(args[1])
-                if date is None:
+                event_date = parse_date(args[1])
+                if event_date is None:
                     error("Unable to parse date")
                 if len(args) == 2:
                     error("Missing event name")
                 else:
-                    calendar_add(date, *args[2:4])
+                    calendar_add(event_date, *args[2:4])
         elif args[0] == "UPD":
             if len(args) == 1:
                 error("Missing event date")
             else:
-                date = parse_date(args[1])
-                if date is None:
+                event_date = parse_date(args[1])
+                if event_date is None:
                     error("Unable to parse date")
                 elif len(args) < 4:
                     error("Note enough arguments given")
                 else:
-                    calendar_upd(date, *args[2:5])
+                    calendar_upd(event_date, *args[2:5])
         elif args[0] == "DEL":
             if len(args) == 1:
                 error("Missing event date")
             else:
-                date = parse_date(args[1])
-                if date is None:
+                event_date = parse_date(args[1])
+                if event_date is None:
                     error("Unable to parse date")
                 if len(args) == 2:
                     error("Missing event name")
                 else:
-                    calendar_del(date, args[2])
+                    calendar_del(event_date, args[2])
         else:
             error("Unrecognised action: " + args[0])
 

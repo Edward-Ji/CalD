@@ -1,8 +1,6 @@
 import os
 import sys
-
-sys.path.append(sys.path.pop(0))
-from datetime import datetime
+from datetime import date
 
 
 # Constants for file paths
@@ -48,7 +46,7 @@ def parse_date(date_string):
     throwing an exception. The string is parsed in 'dd-mm-yyyy' format.
     """
     try:
-        return datetime.strptime(date_string, "%d-%m-%Y").date()
+        return date(*map(int, date_string.split('-')[::-1]))
     except ValueError:
         return None
 
@@ -60,16 +58,16 @@ def read_db(db_path):
             entry = entry.strip()
             if not entry:
                 continue
-            date, name, desc = quoted_split(entry, sep=",")
-            date = parse_date(date)
-            db.append([date, name, desc])
+            event_date, name, desc = quoted_split(entry, sep=",")
+            event_date = parse_date(event_date)
+            db.append([event_date, name, desc])
     return db
 
 
 def print_entry(entry):
-    date, name, desc = entry
-    date = datetime.strftime(date, "%d-%m-%Y")
-    print(" : ".join((date, name, desc)))
+    event_date, name, desc = entry
+    event_date = event_date.strftime("%d-%m-%Y")
+    print(" : ".join((event_date, name, desc)))
 
 
 # Read database path from link file
@@ -91,10 +89,10 @@ def daemon(command):
         error("OSError: " + str(e))
 
 
-def calendar_get_date(date):
+def calendar_get_date(event_date):
     db = read_db(db_path)
     for entry in db:
-        if entry[0] == date:
+        if entry[0] == event_date:
             print_entry(entry)
 
 
@@ -122,11 +120,11 @@ def run_get():
         if len(sys.argv) == 3:
             error("Missing date argument")
         else:
-            date = parse_date(sys.argv[3])
-            if date is None:
+            event_date = parse_date(sys.argv[3])
+            if event_date is None:
                 error("Unable to parse date")
             else:
-                calendar_get_date(date)
+                calendar_get_date(event_date)
     elif sys.argv[2] == "INTERVAL":
         if len(sys.argv) == 4:
             error("Missing date arguments")
@@ -163,8 +161,8 @@ def run():
         if len(sys.argv) == 2:
             error("Missing event date")
         else:
-            date = parse_date(sys.argv[2])
-            if date is None:
+            event_date = parse_date(sys.argv[2])
+            if event_date is None:
                 error("Unable to parse date")
             if len(sys.argv) == 3:
                 error("Missing event name")
@@ -174,8 +172,8 @@ def run():
         if len(sys.argv) == 2:
             error("Missing event date")
         else:
-            date = parse_date(sys.argv[2])
-            if date is None:
+            event_date = parse_date(sys.argv[2])
+            if event_date is None:
                 error("Unable to parse date")
             elif len(sys.argv) < 5:
                 error("Note enough arguments given")
@@ -185,8 +183,8 @@ def run():
         if len(sys.argv) == 2:
             error("Missing event date")
         else:
-            date = parse_date(sys.argv[2])
-            if date is None:
+            event_date = parse_date(sys.argv[2])
+            if event_date is None:
                 error("Unable to parse date")
             if len(sys.argv) == 3:
                 error("Missing event name")
