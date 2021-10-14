@@ -12,36 +12,6 @@ LINK_PATH = "/tmp/calendar_link"
 ERRLOG_PATH = "/tmp/cald_err.log"
 
 
-# Write to error log
-def error(message):
-    if not os.path.exists(ERRLOG_PATH):
-        open(db_path, "w").close()
-    with open(ERRLOG_PATH, "a") as f:
-        f.write(message + "\n")
-
-
-# Craete and link datebase
-if len(sys.argv) < 2:
-    # Use default database path if not specified
-    db_path = os.path.join(os.path.dirname(__file__), "cald_db.csv")
-else:
-    # User database path argument if specified
-    db_path = sys.argv[1]
-# Create empty database if it does not exist
-if not os.path.exists(db_path):
-    open(db_path, "w").close()
-# Write database path to link file
-with open(LINK_PATH, "w") as link:
-    link.write(db_path)
-
-# Create the named pipe if it does not exist
-if not os.path.exists(PIPE_PATH):
-    try:
-        os.mkfifo(PIPE_PATH)
-    except OSError as e:
-        error(f"OSError: {e}")
-
-
 # ================
 # Helper functions
 # ================
@@ -101,9 +71,6 @@ def read_db(db_path):
     return db
 
 
-read_db(db_path)
-
-
 def write_db(db_path, db):
     with open(db_path, "w") as f:
         for entry in db:
@@ -115,18 +82,52 @@ def write_db(db_path, db):
                 desc = f'"{desc}"'
             f.write(",".join((event_date, name, desc)) + "\n")
 
+# Write to error log
+def error(message):
+    if not os.path.exists(ERRLOG_PATH):
+        open(db_path, "w").close()
+    with open(ERRLOG_PATH, "a") as f:
+        f.write(message + "\n")
+
+
+# =====================
+# Prepare global assets
+# =====================
+
+# Craete and link datebase
+if len(sys.argv) < 2:
+    # Use default database path if not specified
+    db_path = os.path.join(os.path.dirname(__file__), "cald_db.csv")
+else:
+    # User database path argument if specified
+    db_path = sys.argv[1]
+# Create empty database if it does not exist
+if not os.path.exists(db_path):
+    open(db_path, "w").close()
+# Write database path to link file
+with open(LINK_PATH, "w") as link:
+    link.write(db_path)
+
+# Create the named pipe if it does not exist
+if not os.path.exists(PIPE_PATH):
+    try:
+        os.mkfifo(PIPE_PATH)
+    except OSError as e:
+        error(f"OSError: {e}")
+
+# Read in database
+db = read_db(db_path)
+
 
 # ==================
 # Calendar functions
 # ==================
 def calendar_add(event_date, name, desc=""):
-    db = read_db(db_path)
     db.append([event_date, name, desc])
     write_db(db_path, db)
 
 
 def calendar_upd(event_date, name, new_name, new_desc=""):
-    db = read_db(db_path)
     for entry in db:
         if entry[0] == event_date and entry[1] == name:
             entry[1] = new_name
@@ -135,7 +136,6 @@ def calendar_upd(event_date, name, new_name, new_desc=""):
 
 
 def calendar_del(event_date, name):
-    db = read_db(db_path)
     for entry in db:
         if entry[0] == event_date and entry[1] == name:
             db.remove(entry)
