@@ -1,0 +1,32 @@
+#!/usr/bin/env bash
+
+# Path
+test_dir=test
+test_tmp=$test_dir/tmp
+
+# ANSI
+bold="\e[1m"
+fg_red="\e[31m"
+fg_green="\e[32m"
+reset_all="\e[0m"
+pass="${bold}${fg_green}[pass]${reset_all}"
+fail="${bold}${fg_red}[fail]${reset_all}"
+
+# Run tests and display results
+for test in $(find $test_dir -name "test_"); do
+    # Redirect testcase output to a temporary file
+    ./$test_dir/$test > $test_tmp
+    # Record the exit status
+    exit_status=$?
+    # Check the exit status
+    if [[ $exit_status -eq 0 ]]; then
+        printf "${pass} $(sed 's/_/ /g' <<< $test)\n"
+    else
+        printf "${fail} $(sed 's/_/ /g' <<< $test)\n"
+        # Print the testcase output from temporary file
+        cat $test_tmp | sed 's/^/       /'
+    fi
+done
+
+# Clean up
+[[ -f $test_tmp ]] && rm $test_tmp

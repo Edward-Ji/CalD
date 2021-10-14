@@ -6,6 +6,6 @@ echo > /tmp/cald_pipe
 kill -2 $daemon_pid
 sleep 1
 if ps -p $daemon_pid > /dev/null; then
-    echo "daemon process not terminated"
+    echo "Daemon process not terminated after INT signal"
     exit 1
 fi
