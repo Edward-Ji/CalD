@@ -13,7 +13,7 @@ pass="${bold}${fg_green}[pass]${reset_all}"
 fail="${bold}${fg_red}[fail]${reset_all}"
 
 # Run tests and display results
-for test in $(find $test_dir -name "test_*"); do
+for test in $(find $test_dir -name "test_*" | sort); do
     # Run test and redirect output to a temporary file
     $test > $test_tmp
     # Record the exit status
