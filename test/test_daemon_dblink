@@ -2,6 +2,10 @@
 
 db_path="${PWD}/datebase.csv"
 link_path='/tmp/calendar_link'
+
+[[ -e $db_path ]] && rm $db_path
+[[ -e $link_path ]] && rm $link_path
+
 ./daemon.py $db_path &
 sleep .1 # allow daemon to prepare
 
@@ -9,7 +13,6 @@ if [[ ! -f $db_path ]]; then
     echo "Path $db_path does not exist or is not a regular file"
     exit 1
 fi
-rm $db_path
 
 if [[ ! -f $link_path ]]; then
     echo "Path $link_path does not exist or is not a regular file"
