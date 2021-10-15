@@ -1,4 +1,4 @@
 __pycache__
 
 *.csv
-!test/*/cald_db.csv
+!test/*/*.csv
