@@ -126,7 +126,7 @@ def run_get():
             else:
                 calendar_get_date(event_date)
     elif sys.argv[2] == "INTERVAL":
-        if len(sys.argv) == 4:
+        if len(sys.argv) <= 4:
             error("Missing date arguments")
         else:
             start_date = parse_date(sys.argv[3])
