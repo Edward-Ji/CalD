@@ -178,7 +178,7 @@ def run():
                 event_date = parse_date(args[1])
                 if event_date is None:
                     error("Unable to parse date")
-                if len(args) == 2:
+                elif len(args) == 2:
                     error("Missing event name")
                 else:
                     calendar_add(event_date, *args[2:4])
