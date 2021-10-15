@@ -1,0 +1,34 @@
+# Contributor: Edward Ji <ziji4098@uni.sydney.edu.au>
+# Maintainer: Edward Ji <ziji4098@uni.sydney.edu.au>
+
+pkgname="cald"
+pkgver="1.0"
+pkgrel=0
+pkgdesc="A simple command line calendar application"
+url="https://github.sydney.edu.au/ttho6664/2021_INFO1112_A2"
+arch="all"
+license="nolicense"
+depends="python3"
+source="
+	cald.initd
+    daemon.py
+    calendar.py
+    calendar
+"
+builddir="$srcdir/"
+
+package() {
+	install -m755 -D "$srcdir"/$pkgname.initd \
+		"$pkgdir"/etc/init.d/$pkgname
+	install -m644 -D "$srcdir"/daemon.py \
+		"$pkgdir"/usr/lib/cald/daemon.py
+	install -m644 -D "$srcdir"/calendar.py \
+		"$pkgdir"/usr/lib/cald/calendar.py
+    install -m777 -D "$srcdir"/calendar \
+        "$pkgdir"/usr/bin/calendar
+}
+
+sha512sums="e936fd844156f64e90b31037e1b8842c410369211aacaf355cfc8ac56a400c45c4af2e7e1dd0416192ed01a6460599d691c7bb2f192e82932db2a30414c35bc3  cald.initd
+18475803129f7096680d5b353ab98bbd39270ea3a5a71b1f062d33a745e3a2f6931698cbc499f242d8a31f6ffbc81d75ca13a3958f1b2312b6263fc46b4ec421  daemon.py
+29750888a598c5803474f919cc688809de6538412253916adacae049da9c6e0aec745d8000e4b4763a6a12d905c0ffc4dd8847f4c789b624beea1afc8d04dfe1  calendar.py
+9dd9fdd4c33159cf3eae830a7aeba422063015c70bd87ef2fee9b2af54dcab89f172a42bcfe2639e9772be3ed53041085bb396d698c06c68863e54269fb7b5cc  calendar"
