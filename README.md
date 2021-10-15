@@ -86,7 +86,7 @@ sudo apk add --repository /home/$USER/packages/$USER
 
 ### Install pre-built APK
 
-A pre-built APK file can be found if the `dist` directory. Simply execute the
+A pre-built APK file can be found in the `dist` directory. Simply execute the
 following command to add the package and install it.
 
 ```
