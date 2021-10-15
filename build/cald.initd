@@ -14,5 +14,7 @@ start() {
 
 stop() {
     # Stop the daemon if present
-    kill -2 `cat $pidfile`
+    pid=`cat $pidfile`
+    ps -o pid | grep $pid > /dev/null && kill -2 $pid
+    exit 0
 }

@@ -1,4 +1,11 @@
 #!/bin/sh
 
-# add something which happends after install
-/etc/init.d/cald start
+daemon=/etc/init.d/cald
+
+# Add the daemon to openrc
+echo 'Adding daemon to open rc'
+rc-update add $daemon default
+
+# Start calendar daemon
+echo 'Starting calendar daemon'
+$daemon start
