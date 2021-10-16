@@ -152,8 +152,6 @@ def run():
         return
 
     # Open named pipe and error log using context manager
-    if sys.argv is None:
-        error("Unterminated literal")
     if len(sys.argv) == 1:
         error("Missing action")
     elif sys.argv[1] == "GET":
