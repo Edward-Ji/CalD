@@ -1,0 +1,73 @@
+#!/usr/bin/env bash
+
+################################################################################
+# Calendar I/O Test
+# This script automatically test the calendar commands with given
+# specifications. It starts the daemon, runs the calendar command with given
+# arguments and checks the stdout and stderr against the expected files. If
+# there is a mismatch, the diff is shown and the script exits with an error
+# code.
+#
+# Error codes:
+# 0 - Pass
+# 1 - Unhandled Python exception
+# 2 - Stdout differs from expected
+# 3 - Stderr differs from expected
+#
+# How to use:
+# 1) Create a direcotry inside the test directory;
+# 2) Add the following files:
+#    - args: The arguments to supply to `python3 calendar.py`. Arguemnts of
+#      multiple calls are seprated into multiple lines;
+#    - cald_db.csv: The database file to use for this specific test;
+#    - expect_out: The expected write to stdout;
+#    - expect_err: The expected write to stderr;
+# 3) Create a symbolic link in that test directory to this file. The name of
+#    the link must begin with "test_" to be called by `run_all`.
+################################################################################
+
+test_dir="$(dirname $0)"
+
+# Path to testcase specifications
+test_arg="$test_dir/args"
+ori_db="$test_dir/cald_db.csv"
+exp_out="$test_dir/expect_out"
+exp_err="$test_dir/expect_err"
+
+# Path to temporary files
+tmp_db="$test_dir/tmp_cald_db.csv"
+tmp_out="$test_dir/tmp_out"
+tmp_err="$test_dir/tmp_err"
+
+# Cleanup temporary files before exit
+clean_exit() {
+    rm $tmp_out $tmp_err $tmp_db
+    exit $1
+}
+
+# Start the daemon with temporary copy of testcase database
+cp $ori_db $tmp_db > /dev/null 2>&1
+./daemon.py $tmp_db &
+
+sleep .1  # Allow daemon to initialize
+
+touch $tmp_out $tmp_err
+while IFS= read -r args; do
+    if ! eval "python3 calendar.py $args >> $tmp_out 2>> $tmp_err"; then
+        cat $tmp_err
+        echo "Unhandled python exception (shown above)"
+        clean_exit 1
+    fi
+done < $test_arg
+
+if ! diff $tmp_out $exp_out; then
+    echo "Stdout differs from expected (shown above)"
+    clean_exit 2
+fi
+
+if ! diff $tmp_err $exp_err; then
+    echo "Stderr differs from expected (shown above)"
+    clean_exit 3
+fi
+
+clean_exit
