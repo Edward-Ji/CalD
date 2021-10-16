@@ -46,7 +46,8 @@ def parse_date(date_string):
     throwing an exception. The string is parsed in 'dd-mm-yyyy' format.
     """
     try:
-        return date(*map(int, date_string.split('-')[::-1]))
+        day, month, year = map(int, date_string.split('-'))
+        return date(year, month, day)
     except ValueError:
         return None
 
