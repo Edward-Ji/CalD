@@ -53,12 +53,10 @@ Delete all events matching the specified date and name.
 
 `python calendar.py DEL <date> <name>`
 
-## Run tests
+## Testing
 
-There are a series of tests included in the `test` directory. Run them from the
-project root. You can run them individually `./test/test_<name>` or `./test/run`
-will run all tests automatically. Note that the test cases may fail on the
-first try sometimes despite working solutions.
+Tests can only be run from the repository root. You can run them individually by
+specifying their path or `test/run_all` will run all tests automatically.
 
 ## Install
 
