@@ -1,10 +1,18 @@
 #!/usr/bin/env bash
 
+################################################################################
+# Tests if the daemon script correctly creates the FIFO (named pipe).
+#
+# Error codes:
+# 0 - Pass
+# 1 - FIFO not created correctly
+################################################################################
+
 fifo_path="/tmp/cald_pipe"
 [[ -e $fifo_path ]] && rm $fifo_path
 
 ./daemon.py &
-sleep .1 # allow daemon to prepare
+sleep .1  # allow daemon to prepare
 
 if [[ ! -p $fifo_path ]]; then
     echo "Path $fifo_path does not exist or is not a named pipe"

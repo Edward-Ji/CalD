@@ -1,6 +1,18 @@
 #!/usr/bin/env bash
 
-db_path="${PWD}/datebase.csv"
+################################################################################
+# Tests if the daemon script correctly creates the database file and the
+# link (index) file. The content of the link file should equal to the path to
+# database file.
+#
+# Error codes:
+# 0 - Pass
+# 1 - Database file not created correctly
+# 2 - Link file not created correctly
+# 3 - Link file content mismatch
+################################################################################
+
+db_path="${PWD}/datebase${RANDOM}.csv"
 link_path='/tmp/calendar_link'
 
 [[ -e $db_path ]] && rm $db_path
@@ -16,9 +28,9 @@ fi
 
 if [[ ! -f $link_path ]]; then
     echo "Path $link_path does not exist or is not a regular file"
-    exit 1
+    exit 2
 fi
 if [[ ! $(cat $link_path) = $db_path ]]; then
     echo "Path $link_path not as expected"
-    exit 1
+    exit 3
 fi
