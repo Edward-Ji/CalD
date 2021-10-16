@@ -19,7 +19,7 @@ for test in $(find $test_dir -name "test_*" | sort); do
     # Record the exit status
     exit_status=$?
     # Get test name
-    test_name=$(basename $test | sed 's/_/ /g')
+    test_name="${bold}$(basename $test | sed 's/_/ /g')${reset_all}"
     # Check the exit status
     if [[ $exit_status -eq 0 ]]; then
         printf "${pass} ${test_name}\n"
