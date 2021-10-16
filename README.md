@@ -90,7 +90,7 @@ A pre-built APK file can be found in the `dist` directory. Simply execute the
 following command to add the package and install it.
 
 ```
-apk add dist/cald.apk
+apk add dist/cald-1.0-r0.apk
 ```
 
 It usually requires root access, so you may need to `su root` or add `sudo` up
