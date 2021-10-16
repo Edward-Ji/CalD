@@ -15,22 +15,33 @@
 db_path="${PWD}/datebase${RANDOM}.csv"
 link_path='/tmp/calendar_link'
 
-[[ -e $db_path ]] && rm $db_path
-[[ -e $link_path ]] && rm $link_path
+clean() {
+    [[ -e $db_path ]] && rm $db_path
+    [[ -e $link_path ]] && rm $link_path
+}
+
+clean_exit() {
+    clean
+    exit $1
+}
+
+clean
 
 ./daemon.py $db_path &
-sleep .1 # allow daemon to prepare
+sleep .1  # allow daemon to prepare
 
 if [[ ! -f $db_path ]]; then
     echo "Path $db_path does not exist or is not a regular file"
-    exit 1
+    clean_exit 1
 fi
 
 if [[ ! -f $link_path ]]; then
     echo "Path $link_path does not exist or is not a regular file"
-    exit 2
+    clean_exit 2
 fi
 if [[ ! $(cat $link_path) = $db_path ]]; then
     echo "Path $link_path not as expected"
-    exit 3
+    clean_exit 3
 fi
+
+clean_exit

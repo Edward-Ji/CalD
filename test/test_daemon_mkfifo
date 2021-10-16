@@ -9,6 +9,7 @@
 ################################################################################
 
 fifo_path="/tmp/cald_pipe"
+
 [[ -e $fifo_path ]] && rm $fifo_path
 
 ./daemon.py &
@@ -18,3 +19,6 @@ if [[ ! -p $fifo_path ]]; then
     echo "Path $fifo_path does not exist or is not a named pipe"
     exit 1
 fi
+
+[[ -e $fifo_path ]] && rm $fifo_path
+exit 0
