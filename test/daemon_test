@@ -58,6 +58,8 @@ while IFS= read -r args; do
     echo "$args" > $pipe
 done < $test_arg
 
+sleep .1  # Allow daemon to finalize
+
 if ! diff $tmp_db $exp_db; then
     echo "Database differs from expected (shown above)"
     clean_exit 1

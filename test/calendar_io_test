@@ -45,14 +45,14 @@ clean_exit() {
     exit $1
 }
 
+# Truncate temporary stdout and stderr
+: > $tmp_out > $tmp_err
+
 # Start the daemon with temporary copy of testcase database
 cp $ori_db $tmp_db > /dev/null 2>&1
 ./daemon.py $tmp_db &
 
 sleep .1  # Allow daemon to initialize
-
-# Truncate temporary stdout and stderr
-: > $tmp_out > $tmp_err
 
 # Call calendar command with arguments
 while IFS= read -r args; do
@@ -62,6 +62,8 @@ while IFS= read -r args; do
         clean_exit 1
     fi
 done < $test_arg
+
+sleep .1  # Allow daemon to finalize
 
 # Compare stdout
 if ! diff $tmp_out $exp_out; then
