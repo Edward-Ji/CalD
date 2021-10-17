@@ -1,8 +1,9 @@
 # Cald
 
-A calendar app.
+A calendar daemon with command line interface.
 
-## Run directly
+<details>
+    <summary> Functionality details </summary>
 
 **Run calendar daemon with `python daemon.py [<database path>]`.**
 
@@ -52,6 +53,8 @@ description is still discarded.
 Delete all events matching the specified date and name.
 
 `python calendar.py DEL <date> <name>`
+
+</details>
 
 ## Testing
 
