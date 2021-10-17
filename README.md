@@ -55,47 +55,33 @@ Delete all events matching the specified date and name.
 
 ## Testing
 
-Tests can only be run from the repository root. You can run them individually by
-specifying their path or `test/run_all` will run all tests automatically.
+Tests can only be run from the repository root. You can run them individually
+by specifying their path or `test/run_all` will run all tests automatically.
 
 ## Install
 
 This project is available as an Alpine Linux build.
 
-### Build manually and install
-
 All the files needed to build the package is included in the `build` directory.
 To build the package yourself, execute the following commands in an Alpine
-Linux machine.
+Linux machine from repository root.
 
 ```
 cd build
-abuild checksum
-abuild -r
+abuild checksum && abuild -r
 ```
 
-The package will be generated in package directory defaults to `~/packages`.
+The package will be generated in the default packages directory usually
+`~/packages/cald`.
 
-Assuming all the configuration is default, install the package using
-
-```
-sudo apk add --repository /home/$USER/packages/$USER
-```
-
-### Install pre-built APK
-
-A pre-built APK file can be found in the `dist` directory. Simply execute the
-following command to add the package and install it.
+Assuming all the configurations are default, install the package using
 
 ```
-apk add dist/cald-1.0-r0.apk
+sudo apk add --repository /home/$USER/packages/cald cald
 ```
-
-It usually requires root access, so you may need to `su root` or add `sudo` up
-front.
 
 After installing the package, the daemon will automatically run upon start up
-using `openrc-run`. A shortcut command `calendar` is available in place of
+with OpenRC service. A shortcut command `calendar` is available in place of
 `python3 calendar.py`. For example, you can execute the following at command
 line.
 
