@@ -1,5 +1,12 @@
 #!/usr/bin/env bash
 
+################################################################################
+# Run all
+# This script locates all executable scripts prefixed with "test_" in the test
+# directory. It runs all of them and display the result with pretty formatting.
+# This script must be run from repository root like this - `test/run_all`.
+################################################################################
+
 # Path
 test_dir='test'
 test_tmp="$test_dir/tmp"
@@ -14,6 +21,9 @@ fail="${bold}${fg_red}[fail]${reset_all}"
 
 # Run tests and display results
 for test in $(find $test_dir -name "test_*" | sort); do
+    # Skip if test is not executable
+    [[ -x $test ]] || continue
+
     # Run test and redirect output to a temporary file
     $test > $test_tmp
     # Record the exit status
