@@ -67,7 +67,9 @@ This project is available as an Alpine Linux build.
 
 All the files needed to build the package is included in the `build` directory.
 To build the package yourself, execute the following commands in an Alpine
-Linux machine from repository root.
+Linux machine from the repository root. If you haven't setup your system and
+account for `abuild`, follow
+[the Alpine wiki](https://wiki.alpinelinux.org/wiki/Creating_an_Alpine_package#Setup_your_system_and_account).
 
 ```
 cd build
@@ -91,3 +93,6 @@ line.
 ```
 calendar ADD 15-10-2021 "some event" "this will be amazing!"
 ```
+
+You can uninstall at anytime with `sudo apk del cald`. The cald daemon will be
+automatically stopped and removed from OpenRC.
