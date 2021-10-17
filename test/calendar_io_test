@@ -51,7 +51,10 @@ cp $ori_db $tmp_db > /dev/null 2>&1
 
 sleep .1  # Allow daemon to initialize
 
-touch $tmp_out $tmp_err
+# Truncate temporary stdout and stderr
+: > $tmp_out > $tmp_err
+
+# Call calendar command with arguments
 while IFS= read -r args; do
     if ! eval "python3 calendar.py $args >> $tmp_out 2>> $tmp_err"; then
         cat $tmp_err
@@ -60,11 +63,13 @@ while IFS= read -r args; do
     fi
 done < $test_arg
 
+# Compare stdout
 if ! diff $tmp_out $exp_out; then
     echo "Stdout differs from expected (shown above)"
     clean_exit 2
 fi
 
+# Compare stderr
 if ! diff $tmp_err $exp_err; then
     echo "Stderr differs from expected (shown above)"
     clean_exit 3
