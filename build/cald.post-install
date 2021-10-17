@@ -2,10 +2,12 @@
 
 daemon=/etc/init.d/cald
 
-# Add the daemon to openrc
-echo 'Adding daemon to open rc'
+# Add the daemon to OpenRC
+echo 'Adding daemon to OpenRC'
 rc-update add $daemon default
 
 # Start calendar daemon
 echo 'Starting calendar daemon'
 $daemon start
+
+exit

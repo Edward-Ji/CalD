@@ -15,7 +15,10 @@ source="
     calendar.py
     calendar
 "
-install="$pkgname.post-install"
+install="
+	$pkgname.post-install
+	$pkgname.pre-deinstall
+"
 builddir="$srcdir/"
 
 package() {
@@ -28,8 +31,3 @@ package() {
     install -m777 -D "$srcdir"/calendar \
         "$pkgdir"/usr/bin/calendar
 }
-
-sha512sums="8e425166f9201eb0bf408da40678a0e210e30fadec324d1fba12a3e5278ba1c42156d78b19c34f64b9d5c3afca403684145395703ffdd21a0bfb78ebccb08b87  cald.initd
-f61e5d3d887bc25977e417b930c64e9ad3315535bffe284c8a67dfd79a5e79b6d5407617ee26c8887d56f9ca4c0da2ca691618db72ad8937e55407defd692d3c  daemon.py
-4c33920f7ef696b76e28e484975b0d1cce266803ba598f606b48708e0b193e7ea2d48e53d5fd0749060bfc1df4f9b08a73d8158343b1b5c755b7700a66dc63fc  calendar.py
-9dd9fdd4c33159cf3eae830a7aeba422063015c70bd87ef2fee9b2af54dcab89f172a42bcfe2639e9772be3ed53041085bb396d698c06c68863e54269fb7b5cc  calendar"
