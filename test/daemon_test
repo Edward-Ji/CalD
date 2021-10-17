@@ -1,0 +1,71 @@
+#!/usr/bin/env bash
+
+################################################################################
+# Daemon I/O Test
+# This script automatically test the calendar daemon with given
+# specifications. It starts the daemon and pipes the arguments to default pipe.
+# It then checks the stdout and stderr against the expected files. If there is
+# a mismatch, the diff is shown and the script exits with an error.
+# code.
+#
+# Error codes:
+# 0 - Pass
+# 1 - Database differs from expected
+# 2 - Error log differs from expected
+#
+# How to use:
+# 1) Create a direcotry inside the test directory;
+# 2) Add the following files:
+#    - args: The arguments to pipe to `daemon.py`. Arguemnts of multiple calls
+#      are seprated into multiple lines;
+#    - cald_db.csv: The database file to use for this specific test;
+#    - expect_err: The expected write to error log;
+# 3) Create a symbolic link in that test directory to this file. The name of
+#    the link must begin with "test_" to be called by `run_all`.
+################################################################################
+
+test_dir="$(dirname $0)"
+
+# Path to testcase specifications
+test_arg="$test_dir/args"
+exp_db="$test_dir/expect_cald_db.csv"
+ori_db="$test_dir/cald_db.csv"
+exp_err="$test_dir/expect_err"
+
+# Path to system temporary files
+err_log="/tmp/cald_err.log"
+pipe="/tmp/cald_pipe"
+
+# Path to testcase temporary files
+tmp_db="$test_dir/tmp_cald_db.csv"
+
+# Cleanup temporary files before exit
+clean_exit() {
+    rm $tmp_db
+    exit $1
+}
+
+# Truncate error log
+: > $err_log
+
+# Start the daemon with temporary copy of testcase database
+cp -f $ori_db $tmp_db > /dev/null 2>&1
+./daemon.py $tmp_db > /dev/null 2>&1 &
+
+sleep .1  # Allow daemon to initialize
+
+while IFS= read -r args; do
+    echo "$args" > $pipe
+done < $test_arg
+
+if ! diff $tmp_db $exp_db; then
+    echo "Database differs from expected (shown above)"
+    clean_exit 1
+fi
+
+if ! diff $err_log $exp_err; then
+    echo "Stderr differs from expected (shown above)"
+    clean_exit 2
+fi
+
+clean_exit
