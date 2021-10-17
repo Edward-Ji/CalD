@@ -1,5 +1,7 @@
 # Cald
 
+[![CI](https://github.com/Edward-Ji/Cald/actions/workflows/main.yml/badge.svg)](https://github.com/Edward-Ji/Cald/actions/workflows/main.yml)
+
 A calendar daemon with command line interface.
 
 <details>
