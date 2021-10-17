@@ -19,20 +19,26 @@ reset_all="\e[0m"
 pass="${bold}${fg_green}[pass]${reset_all}"
 fail="${bold}${fg_red}[fail]${reset_all}"
 
+declare -i count=0
+declare -i passed=0
+
 # Run tests and display results
 for test in $(find $test_dir -name "test_*" | sort); do
     # Skip if test is not executable
     [[ -x $test ]] || continue
+
+    ((count++))  # increment testcase count
 
     # Run test and redirect output to a temporary file
     $test > $test_tmp
     # Record the exit status
     exit_status=$?
     # Get test name
-    test_name="${bold}$(basename $test | sed 's/_/ /g')${reset_all}"
+    test_name=$(basename $test | sed 's/_/ /g')
     # Check the exit status
     if [[ $exit_status -eq 0 ]]; then
         printf "${pass} ${test_name}\n"
+        ((passed++))  # increment passed count
     else
         printf "${fail} ${test_name}\n"
         # Print the testcase output from temporary file
@@ -47,3 +53,8 @@ for test in $(find $test_dir -name "test_*" | sort); do
     [[ -f $test_tmp ]] && rm $test_tmp
     pkill -9 -f "./daemon.py"
 done
+
+# Display overall summary
+declare -i failed=$(($count - $passed))
+printf "${bold}Test summary${reset_all}
+${count} testcases, ${passed} passed, ${failed} failed\n"
