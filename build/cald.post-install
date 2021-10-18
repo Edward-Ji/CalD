@@ -10,4 +10,4 @@ rc-update add $daemon default
 echo 'Starting calendar daemon'
 $daemon start
 
-exit
+exit 0

@@ -10,4 +10,4 @@ $daemon stop
 echo 'Removing daemon from OpenRC'
 rc-update del cald
 
-exit
+exit 0
