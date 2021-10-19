@@ -17,7 +17,7 @@ RUN abuild-keygen -a -i -n
 
 # Copy build contents to builder home
 WORKDIR /home/builder
-COPY --chown=builder *.py .
+COPY --chown=builder *.py ./
 COPY --chown=builder build ./build
 
 # Run build and install
