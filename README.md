@@ -1,6 +1,7 @@
 # Cald
 
-[![CI](https://github.com/Edward-Ji/Cald/actions/workflows/main.yml/badge.svg)](https://github.com/Edward-Ji/Cald/actions/workflows/main.yml)
+[![Docker Image CI](https://github.com/Edward-Ji/Cald/actions/workflows/docker-image.yml/badge.svg)](https://github.com/Edward-Ji/Cald/actions/workflows/docker-image.yml)
+[![Run Test CI](https://github.com/Edward-Ji/Cald/actions/workflows/run_test.yml/badge.svg)](https://github.com/Edward-Ji/Cald/actions/workflows/run_test.yml)
 
 A calendar daemon with command line interface.
 
