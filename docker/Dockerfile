@@ -4,6 +4,7 @@ FROM alpine:latest
 RUN apk add alpine-sdk openrc sudo
 
 # Prepare OpenRC
+VOLUME ["/sys/fs/cgroup"]
 RUN mkdir /run/openrc && touch /run/openrc/softlevel
 
 # Setup system and builder account

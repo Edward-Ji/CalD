@@ -22,5 +22,7 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
-    - name: Build the Docker image
+    - name: Build a Docker image
       run: docker build . --file docker/Dockerfile --tag cald:$(date +%s)
+    - name: Run a Docker container
+      run: docker run -it -v /sys/fs/cgroup --name cald cald sh -c "sleep .1; calendar"
