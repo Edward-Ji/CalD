@@ -17,6 +17,7 @@ RUN abuild-keygen -a -i -n
 
 # Copy build contents to builder home
 WORKDIR /home/builder
+COPY --chown=builder dockerentry ./
 COPY --chown=builder *.py ./
 COPY --chown=builder build ./build
 
@@ -25,5 +26,8 @@ WORKDIR build
 RUN abuild checksum && abuild -r
 RUN sudo apk add --repository /home/builder/packages/builder cald
 
-# Initialize OpenRC upon start-up
-CMD sudo /sbin/openrc-init
+# Entry with daemon started
+WORKDIR /home/builder
+ENTRYPOINT ["./dockerentry"]
+CMD ["ash"]
+
