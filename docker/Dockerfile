@@ -17,7 +17,7 @@ RUN abuild-keygen -a -i -n
 
 # Copy build contents to builder home
 WORKDIR /home/builder
-COPY --chown=builder dockerentry ./
+COPY --chown=builder docker/dockerentry.sh ./
 COPY --chown=builder *.py ./
 COPY --chown=builder build ./build
 
@@ -28,6 +28,6 @@ RUN sudo apk add --repository /home/builder/packages/builder cald
 
 # Entry with daemon started
 WORKDIR /home/builder
-ENTRYPOINT ["./dockerentry"]
+ENTRYPOINT ["./dockerentry.sh"]
 CMD ["ash"]
 
