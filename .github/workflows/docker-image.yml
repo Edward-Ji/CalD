@@ -2,13 +2,7 @@ name: Docker Image CI
 
 on:
   push:
-    branches: [ master ]
-    paths:
-      - 'Dockerfile'
-      - '*.py'
-      - 'build/**'
-  pull_request:
-    branches: [ master ]
+    branches: [ main ]
     paths:
       - 'Dockerfile'
       - '*.py'
@@ -25,7 +19,24 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
-    - name: Build a Docker image
-      run: docker build . --file docker/Dockerfile --tag cald:github
-    - name: Run a Docker container
-      run: docker run -v /sys/fs/cgroup --name cald cald:github sh -c "sleep .1; calendar"
+    
+    - name: Log in to Docker Hub
+      uses: docker/login-action@v1
+      with:
+        username: ${{ secrets.DOCKER_U }}
+        password: ${{ secrets.DOCKER_P }}
+      
+    - name: Extract metadata (tags, labels) for Docker
+      id: meta
+      uses: docker/metadata-action@v3
+      with:
+        images: edwardji/cald
+    
+    - name: Build and push Docker image
+      uses: docker/build-push-action@v2
+      with:
+        context: .
+        file: docker/Dockerfile
+        push: true
+        tags: ${{ steps.meta.outputs.tags }}
+        labels: ${{ steps.meta.outputs.labels }}
