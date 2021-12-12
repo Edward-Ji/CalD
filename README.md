@@ -5,8 +5,7 @@
 
 A calendar daemon with command line interface.
 
-<details>
-    <summary> Functionality details </summary>
+## Functionality details
 
 **Run calendar daemon with `python daemon.py [<database path>]`.**
 
@@ -57,14 +56,14 @@ Delete all events matching the specified date and name.
 
 `python calendar.py DEL <date> <name>`
 
-</details>
-
 ## Testing
 
 Tests can only be run from the repository root. You can run them individually
 by specifying their path or `test/run_all` will run all tests automatically.
 
 ## Install
+
+### Build Manually
 
 This project is available as an Alpine Linux build.
 
@@ -99,3 +98,29 @@ calendar ADD 15-10-2021 "some event" "this will be amazing!"
 
 You can uninstall at anytime with `sudo apk del cald`. The cald daemon will be
 automatically stopped and removed from OpenRC.
+
+### Virtualization with Docker
+
+If you lack the means to run an Alpine Linux virtual machine, you can use the
+Docker to run this package in a container. Do note that OpenRC doesn't fully
+function in a container, so installation on a virtual machine remains the better
+option. In this project, OpenRC is manually boot up using Docker entry point and
+volume option.
+
+Use the following commands to download the image from Docker Hub.
+
+```
+docker pull edwardji/cald
+```
+
+Or if you prefer building the Docker image yourself, use the following commands.
+
+```
+docker build . --file docker/Dockerfile --tag cald
+```
+
+Then, run the container using the image with
+
+```
+docker run -ti -v /sys/fs/cgroup --name cald_runner cald sh
+```
