@@ -110,7 +110,7 @@ volume option.
 Use the following commands to download the image from Docker Hub.
 
 ```
-docker pull edwardji/cald
+docker pull edwardji/cald:main
 ```
 
 Or if you prefer building the Docker image yourself, use the following commands.
