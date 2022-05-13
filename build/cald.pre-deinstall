@@ -2,11 +2,11 @@
 
 daemon=/etc/init.d/cald
 
-# Start calendar daemon
+# Stop calendar daemon
 echo 'Stopping calendar daemon'
 $daemon stop
 
-# Add the daemon to OpenRC
+# Remove the daemon from OpenRC
 echo 'Removing daemon from OpenRC'
 rc-update del cald
 
