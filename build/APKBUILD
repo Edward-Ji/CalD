@@ -1,19 +1,19 @@
-# Contributor: Edward Ji <ziji4098@uni.sydney.edu.au>
-# Maintainer: Edward Ji <ziji4098@uni.sydney.edu.au>
+# Contributor: Edward Ji <jiziao6@gmail.com>
+# Maintainer: Edward Ji <jiziao6@gmail.com>
 
 pkgname="cald"
 pkgver="1.0"
 pkgrel=0
-pkgdesc="A simple command line calendar application"
-url="https://github.sydney.edu.au/ttho6664/2021_INFO1112_A2"
+pkgdesc="A simple command line calendar application with daemon."
+url="https://github.com/Edward-Ji/CalD"
 arch="all"
 license="nolicense"
 depends="python3"
 source="
 	cald.initd
-    daemon.py
-    calendar.py
-    calendar
+	daemon.py
+	calendar.py
+	calendar
 "
 install="
 	$pkgname.post-install
@@ -28,6 +28,6 @@ package() {
 		"$pkgdir"/usr/lib/cald/daemon.py
 	install -m644 -D "$srcdir"/calendar.py \
 		"$pkgdir"/usr/lib/cald/calendar.py
-    install -m777 -D "$srcdir"/calendar \
-        "$pkgdir"/usr/bin/calendar
+	install -m777 -D "$srcdir"/calendar \
+        	"$pkgdir"/usr/bin/calendar
 }
